@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById('send-button').onclick = sendMessage;
     document.getElementById('user-input').addEventListener("keydown", function(event) {
         if (event.key === "Enter") {
+            event.preventDefault(); // Prevent form submission
             sendMessage();
         }
     });
@@ -18,6 +19,7 @@ async function getBotResponse(userInput) {
     });
 
     const data = await response.json();
+    console.log('Response from API:', data); // Log the response for debugging
     if (data && data[0] && data[0].generated_text) {
         return data[0].generated_text;
     } else {
