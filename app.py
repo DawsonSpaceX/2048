@@ -1,7 +1,6 @@
 from flask import Flask, request, jsonify
 from transformers import AutoTokenizer, AutoModel
 import torch
-import os
 
 app = Flask(__name__)
 
@@ -18,10 +17,10 @@ def generate():
     inputs = tokenizer(user_input, return_tensors="pt")
     with torch.no_grad():
         outputs = model(**inputs)
-    
+
     # Get the average embedding as a response (you can customize as needed)
     sentence_embedding = outputs.last_hidden_state.mean(dim=1).tolist()
-    
+
     return jsonify({"embedding": sentence_embedding})
 
 if __name__ == "__main__":
