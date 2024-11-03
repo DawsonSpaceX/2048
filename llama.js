@@ -1,26 +1,30 @@
 const accessToken = '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'; // Your Hugging Face access token
 
+// Wait for the DOM to fully load before running the script
 document.addEventListener("DOMContentLoaded", () => {
-    document.getElementById("sendBtn").onclick = async function () {
-        const userInput = document.getElementById("userInput").value;
-        const chatBox = document.getElementById("chatBox");
+    const sendBtn = document.getElementById("sendBtn");
+    const userInput = document.getElementById("userInput");
+    const chatBox = document.getElementById("chatBox");
 
-        chatBox.innerHTML += `<p>You: ${userInput}</p>`;
+    sendBtn.onclick = async function () {
+        const userMessage = userInput.value;
+        chatBox.innerHTML += `<p>You: ${userMessage}</p>`;
         
         try {
-            const botResponse = await getBotResponse(userInput);
+            const botResponse = await getBotResponse(userMessage);
             chatBox.innerHTML += `<p>AI: ${botResponse}</p>`;
         } catch (error) {
             chatBox.innerHTML += `<p>AI: Sorry, something went wrong.</p>`;
         }
 
-        document.getElementById("userInput").value = ""; // Clear the input field
+        userInput.value = ""; // Clear the input field
+        chatBox.scrollTop = chatBox.scrollHeight; // Auto-scroll to the bottom
     };
 
     // Allow sending message with Enter key
-    document.getElementById("userInput").addEventListener("keypress", function (e) {
+    userInput.addEventListener("keypress", function (e) {
         if (e.key === "Enter") {
-            document.getElementById("sendBtn").click();
+            sendBtn.click();
         }
     });
 });
