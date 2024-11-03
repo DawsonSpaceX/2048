@@ -1,8 +1,10 @@
-document.getElementById("send-button").addEventListener("click", sendMessage);
-document.getElementById("user-input").addEventListener("keypress", function(event) {
-    if (event.key === "Enter") {
-        sendMessage();
-    }
+document.addEventListener("DOMContentLoaded", function () {
+    document.getElementById("send-button").addEventListener("click", sendMessage);
+    document.getElementById("user-input").addEventListener("keypress", function (event) {
+        if (event.key === "Enter") {
+            sendMessage();
+        }
+    });
 });
 
 let dotCount = 0;
@@ -43,8 +45,8 @@ async function getBotResponse(userMessage) {
 
 async function sendMessage() {
     const userInput = document.getElementById("user-input");
-    const userMessage = userInput.value;
-    if (!userMessage.trim()) return;
+    const userMessage = userInput.value.trim();
+    if (!userMessage) return;
 
     addMessageToChat('User: ' + userMessage);
     userInput.value = '';
@@ -60,8 +62,8 @@ function addMessageToChat(message) {
     if (message.startsWith('Comet:')) {
         const typingElement = document.createElement("span");
         typingElement.className = "typing-animation";
-        messageElement.appendChild(typingElement);
-        chatbox.appendChild(messageElement);
+        chatbox.appendChild(messageElement); // Append the message container first
+        messageElement.appendChild(typingElement); // Then append the typing element
 
         // Simulate typing effect
         const fullMessage = message.replace('Comet: ', '');
@@ -79,8 +81,4 @@ function addMessageToChat(message) {
     }
 
     chatbox.scrollTop = chatbox.scrollHeight; // Scroll to the bottom
-}
-
-function openSettings() {
-    alert("Settings are not yet implemented.");
 }
