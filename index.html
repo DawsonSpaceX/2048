@@ -3,16 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
     <title>Comet AI Chatbot</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Link to your CSS -->
 </head>
 <body>
-    <div id="chat-container">
-        <div id="chatbox"></div>
-        <input type="text" id="user-input" placeholder="Type your message...">
-        <button id="send-button">Send</button>
+    <div class="chat-container">
+        <div class="chatbox" id="chatbox"></div>
+        <div class="input-container">
+            <input type="text" id="user-input" placeholder="Type your message here...">
+            <button id="send-button">Send</button>
+        </div>
     </div>
-
-    <script src="gpt-neo.js"></script> <!-- Include the GPT-Neo JS file -->
+    <script src="gpt-neo.js"></script>
 </body>
 </html>
