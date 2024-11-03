@@ -19,222 +19,104 @@
         }
         .container {
             text-align: center;
-            display: none; /* Hidden until login */
-            position: relative;
             max-width: 600px;
             width: 100%;
+            border-radius: 10px;
+            overflow: hidden;
+            background-color: #ffffff; /* White background for container */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
         .header {
             margin-bottom: 20px;
         }
-        .typing-animation {
-            display: inline-block;
-            color: black;
-            font-size: 24px;
-            position: relative;
-            margin: 20px 0;
-        }
-        .typing-animation::after {
-            content: ' .';
-            animation: blink 1s step-start infinite;
-            position: absolute;
-            left: 100%;
-        }
-        @keyframes blink {
-            0%, 100% { opacity: 0; }
-            50% { opacity: 1; }
-        }
-        .text-box {
-            width: 80%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 20px;
-            margin: 20px 0;
-            resize: vertical; /* Allow vertical resizing */
-            min-height: 40px;
-            font-size: 16px;
-        }
-        .send-button {
-            background-color: white;
-            border: none;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            margin-top: 10px;
-        }
-        .send-button::before {
-            content: '';
-            border: solid black;
-            border-width: 0 2px 2px 0;
-            display: inline-block;
-            padding: 3px;
-            transform: rotate(135deg);
-            position: absolute;
-        }
-        /* Profile picture */
-        .profile-pic {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            cursor: pointer;
-            position: absolute;
-            top: 20px;
-            right: 20px;
-        }
-        /* Modal Styles */
-        .modal {
-            display: none; /* Hidden by default */
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.5); /* Black with transparency */
-            justify-content: center;
-            align-items: center;
-        }
-        .modal-content {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            width: 300px;
-            text-align: center;
-        }
-        /* Chat Area */
-        .chat-area {
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            padding: 10px;
-            margin-top: 20px;
-            height: 300px;
+        #chat-area {
+            height: 400px;
             overflow-y: auto;
-            background-color: #f9f9f9; /* Light gray for chat area */
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            background-color: #f9f9f9; /* Light background for chat area */
         }
         .message {
-            padding: 10px;
-            border-radius: 10px;
             margin: 5px 0;
-            width: fit-content;
-            max-width: 80%;
+            padding: 10px;
+            border-radius: 5px;
         }
         .user-message {
-            background-color: #10a37f; /* User message color */
-            color: white;
-            align-self: flex-end;
+            background-color: #b3d1ff; /* Light blue for user messages */
+            text-align: right;
         }
         .bot-message {
-            background-color: #e1e1e1; /* Bot message color */
-            color: black;
-            align-self: flex-start;
+            background-color: #e0e0e0; /* Light gray for bot messages */
+            text-align: left;
         }
-        /* Typing Indicator for Bot */
-        .bot-typing {
-            display: none; /* Hidden by default */
+        .typing-animation {
+            display: none;
             color: black;
+            font-size: 24px;
+            margin: 20px 0;
+        }
+        .input-area {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+        #user-input {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+        #send-button {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #send-button:hover {
+            background-color: #45a049;
         }
     </style>
 </head>
 <body>
-    <!-- Login / Register Container -->
-    <div id="login-container" style="text-align: center;">
-        <h1>Chat Application</h1>
-        <input type="text" id="username-input" placeholder="Enter Username" required>
-        <button onclick="createAccount()">Create Account</button>
-        <p id="error-message" style="color: red;"></p>
-    </div>
-
-    <!-- Main Chat Container -->
-    <div class="container" id="main-container">
+    <div class="container">
         <div class="header">
-            <h1>Welcome to the Chat App</h1>
+            <h2>Chat Application</h2>
         </div>
-        <div class="typing-animation" id="typing-animation">What can I help with?</div>
-        <div class="chat-area" id="chat-area"></div>
-        <textarea class="text-box" id="user-input" placeholder="Type your message..."></textarea>
-        <button class="send-button" onclick="sendMessage()"></button>
-        <img src="path_to_your_profile_pic.jpg" class="profile-pic" onclick="toggleProfileOptions()">
-        <div id="bot-typing" class="bot-typing">Typing...</div>
-    </div>
-
-    <!-- Settings Modal -->
-    <div class="modal" id="settings-modal">
-        <div class="modal-content">
-            <h3>Settings</h3>
-            <button onclick="changeTheme()">Change Theme</button>
-            <button onclick="closeModal()">Close</button>
+        <div id="chat-area"></div>
+        <div class="typing-animation" id="bot-typing">Comet is typing...</div>
+        <div class="input-area">
+            <input type="text" id="user-input" placeholder="Type your message here..." />
+            <button id="send-button" onclick="sendMessage()">Send</button>
         </div>
     </div>
 
     <script>
-        const usernames = []; // Store usernames
-        const botResponses = [
-            "That's interesting! Can you tell me more?",
-            "I see! How does that make you feel?",
-            "Why do you think that is?",
-            "That's a good point! What else?",
-            "Hmm, I hadn't thought of that. What do you think?",
-            "Tell me more about your thoughts on that!",
-            "That's a fascinating topic! What else can you share?",
-            "I'm here to help! What do you want to discuss?",
-        ];
+        let responses = {};
 
-        function createAccount() {
-            const usernameInput = document.getElementById('username-input');
-            const errorMessage = document.getElementById('error-message');
-            const username = usernameInput.value.trim();
+        // Fetch responses from JSON file
+        async function fetchResponses() {
+            const response = await fetch('https://raw.githubusercontent.com/DawsonSpaceX/CometAI/main/responses.json');
+            responses = await response.json();
+        }
 
-            // Validate username
-            if (username === '' || usernames.includes(username) || containsBadWords(username)) {
-                errorMessage.textContent = "Invalid username! Please try again.";
-                return;
+        function getBotResponse(userMessage) {
+            // Simple logic to determine response based on user message
+            if (userMessage.includes("hello") || userMessage.includes("hi")) {
+                return getRandomResponse(responses.greetings);
+            } else if (userMessage.includes("?")) {
+                return getRandomResponse(responses.questions);
+            } else {
+                return getRandomResponse(responses.farewells);
             }
-
-            // Add username and proceed to main container
-            usernames.push(username);
-            usernameInput.value = '';
-            errorMessage.textContent = '';
-            showMainContainer();
         }
 
-        function containsBadWords(username) {
-            const badWords = ["badword1", "badword2"]; // Example bad words
-            return badWords.some(word => username.toLowerCase().includes(word));
-        }
-
-        function showMainContainer() {
-            document.getElementById('login-container').style.display = 'none';
-            document.getElementById('main-container').style.display = 'block';
-            document.getElementById('chat-area').innerHTML = ''; // Clear chat area
-            animateTyping();
-        }
-
-        function animateTyping() {
-            const typingAnimation = document.getElementById('typing-animation');
-            typingAnimation.style.opacity = 1;
-
-            // Delay to simulate typing
-            setTimeout(() => {
-                typingAnimation.style.opacity = 0; // Fade out
-            }, 3000); // Change duration as needed
-        }
-
-        function toggleProfileOptions() {
-            document.getElementById('settings-modal').style.display = 'flex';
-        }
-
-        function changeTheme() {
-            const currentColor = document.body.style.backgroundColor;
-            document.body.style.backgroundColor = currentColor === 'rgb(211, 211, 211)' ? '#333' : '#d3d3d3'; // Toggle between light and dark
-        }
-
-        function closeModal() {
-            document.getElementById('settings-modal').style.display = 'none';
+        function getRandomResponse(arr) {
+            return arr[Math.floor(Math.random() * arr.length)];
         }
 
         function sendMessage() {
@@ -262,18 +144,16 @@
                 const botMessage = document.createElement('div');
                 botMessage.className = 'message bot-message';
 
-                // Simulate typing
-                setTimeout(() => {
-                    botMessage.textContent = getBotResponse();
-                    chatArea.appendChild(botMessage);
-                    chatArea.scrollTop = chatArea.scrollHeight; // Auto-scroll to bottom
-                }, 1000); // Delay for bot response
-            }, 2000); // Delay before showing typing indicator
+                // Get bot response from JSON
+                const response = getBotResponse(userMessage.textContent);
+                botMessage.textContent = response;
+                chatArea.appendChild(botMessage);
+                chatArea.scrollTop = chatArea.scrollHeight; // Auto-scroll to bottom
+            }, 1000); // Delay for bot response
         }
 
-        function getBotResponse() {
-            return botResponses[Math.floor(Math.random() * botResponses.length)];
-        }
+        // Call fetchResponses when the page loads
+        window.onload = fetchResponses;
     </script>
 </body>
 </html>
