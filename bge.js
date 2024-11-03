@@ -40,7 +40,17 @@ async function getBotResponse(userMessage) {
     }
 
     const data = await response.json();
-    return data.generated_text || "I'm not sure how to respond.";
+    
+    // Log the data to inspect the structure
+    console.log("Response data:", data);
+    
+    // Check if 'generated_text' exists in the response data
+    if (data && data.generated_text) {
+        return data.generated_text;
+    } else {
+        // Adjusting the fallback response to provide more context
+        return "It seems I'm having trouble understanding that. Could you rephrase?";
+    }
 }
 
 async function sendMessage() {
