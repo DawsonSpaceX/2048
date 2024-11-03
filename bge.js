@@ -5,9 +5,19 @@ document.getElementById("user-input").addEventListener("keypress", function(even
     }
 });
 
+let dotCount = 0;
+const thinkingElement = document.getElementById("thinking-animation");
+const dotsElement = document.getElementById("dots");
+
+function updateThinkingAnimation() {
+    dotsElement.innerText = '.'.repeat(dotCount);
+    dotCount = (dotCount + 1) % 4; // Cycle through 0 to 3 dots
+}
+
 async function getBotResponse(userMessage) {
-    const thinkingAnimation = document.getElementById("thinking-animation");
-    thinkingAnimation.classList.remove("hidden");
+    thinkingElement.classList.remove("hidden");
+    dotCount = 0;
+    const thinkingInterval = setInterval(updateThinkingAnimation, 500);
 
     const response = await fetch('https://api-inference.huggingface.co/models/BAAI/bge-base-en-v1.5', {
         method: 'POST',
@@ -18,7 +28,8 @@ async function getBotResponse(userMessage) {
         body: JSON.stringify({ inputs: userMessage })
     });
 
-    thinkingAnimation.classList.add("hidden");
+    clearInterval(thinkingInterval);
+    thinkingElement.classList.add("hidden");
 
     if (!response.ok) {
         const error = await response.json();
