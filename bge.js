@@ -1,74 +1,35 @@
-document.addEventListener("DOMContentLoaded", function () {
-    document.getElementById("send-button").addEventListener("click", sendMessage);
-    document.getElementById("user-input").addEventListener("keypress", function (event) {
-        if (event.key === "Enter") {
-            sendMessage();
-        }
-    });
-});
-
-let dotCount = 0;
-const thinkingElement = document.getElementById("thinking-animation");
-const dotsElement = document.getElementById("dots");
-
-function updateThinkingAnimation() {
-    dotsElement.innerText = '.'.repeat(dotCount);
-    dotCount = (dotCount + 1) % 4; // Cycle through 0 to 3 dots
-}
-
-async function getBotResponse(userMessage) {
-    thinkingElement.classList.remove("hidden");
-    dotCount = 0;
-    const thinkingInterval = setInterval(updateThinkingAnimation, 500);
-
-    const response = await fetch('https://api-inference.huggingface.co/models/BAAI/bge-base-en-v1.5', {
-        method: 'POST',
+async function getBotResponse(input) {
+    const response = await fetch("http://localhost:5000/generate", {
+        method: "POST",
         headers: {
-            'Authorization': 'Bearer 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',
-            'Content-Type': 'application/json'
+            "Content-Type": "application/json"
         },
-        body: JSON.stringify({ inputs: userMessage })
+        body: JSON.stringify({ text: input })
     });
-
-    clearInterval(thinkingInterval);
-    thinkingElement.classList.add("hidden");
 
     if (!response.ok) {
         const error = await response.json();
         console.error("Error from API:", error);
-        return `Error: ${error.error || 'Something went wrong. Please try again later.'}`;
+        return "I'm not sure how to respond.";
     }
 
     const data = await response.json();
-    
-    // Log the data to inspect the structure
-    console.log("Response data:", data);
-    
-    // Check if 'generated_text' exists in the response data
-    if (data && data.generated_text) {
-        return data.generated_text;
-    } else {
-        // Adjusting the fallback response to provide more context
-        return "It seems I'm having trouble understanding that. Could you rephrase?";
-    }
+    return data.embedding; // Adjust based on your needs
 }
 
-async function sendMessage() {
-    const userInput = document.getElementById("user-input");
-    const userMessage = userInput.value.trim();
-    if (!userMessage) return;
-
-    addMessageToChat('User: ' + userMessage);
-    userInput.value = '';
-
-    const botResponse = await getBotResponse(userMessage);
-    addMessageToChat('Comet: ' + botResponse);
-}
-
-function addMessageToChat(message) {
-    const chatbox = document.getElementById("chatbox");
+function appendMessage(sender, message) {
+    const chatBox = document.getElementById("chatBox");
     const messageElement = document.createElement("div");
-    messageElement.innerText = message;
-    chatbox.appendChild(messageElement);
-    chatbox.scrollTop = chatbox.scrollHeight; // Scroll to the bottom
+    messageElement.className = sender;
+    messageElement.innerHTML = `${sender}: ${message}`;
+    chatBox.appendChild(messageElement);
 }
+
+document.getElementById("sendButton").addEventListener("click", async () => {
+    const userInput = document.getElementById("userInput").value;
+    appendMessage("User", userInput);
+    document.getElementById("userInput").value = "";
+
+    const response = await getBotResponse(userInput);
+    appendMessage("CometAI", response);
+});
