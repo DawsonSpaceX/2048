@@ -18,7 +18,10 @@ async function getBotResponse(userMessage) {
 async function sendMessage() {
     const userInput = document.getElementById('user-input').value;
     if (userInput.trim() === "") return; // Don't send empty messages
+
+    console.log("User Input:", userInput); // Log the user input
     const botResponse = await getBotResponse(userInput);
+    
     document.getElementById('chatbox').innerHTML += `<div>User: ${userInput}</div>`;
     document.getElementById('chatbox').innerHTML += `<div>Bot: ${botResponse}</div>`;
     document.getElementById('user-input').value = ''; // Clear input after sending
@@ -27,7 +30,12 @@ async function sendMessage() {
 // Add event listeners once the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', () => {
     // Event listener for send button
-    document.getElementById('send-button').onclick = sendMessage;
+    const sendButton = document.getElementById('send-button');
+    if (sendButton) {
+        sendButton.onclick = sendMessage;
+    } else {
+        console.error("Send button not found!"); // Log if button not found
+    }
 
     // Event listener for Enter key
     document.getElementById('user-input').addEventListener('keydown', function(event) {
