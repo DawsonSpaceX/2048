@@ -24,13 +24,16 @@ async function sendMessage() {
     document.getElementById('user-input').value = ''; // Clear input after sending
 }
 
-// Event listener for send button
-document.getElementById('send-button').onclick = sendMessage;
+// Add event listeners once the DOM is fully loaded
+document.addEventListener('DOMContentLoaded', () => {
+    // Event listener for send button
+    document.getElementById('send-button').onclick = sendMessage;
 
-// Event listener for Enter key
-document.getElementById('user-input').addEventListener('keydown', function(event) {
-    if (event.key === 'Enter') {
-        sendMessage(); // Call sendMessage function on Enter key press
-        event.preventDefault(); // Prevent the default action (like a form submission)
-    }
+    // Event listener for Enter key
+    document.getElementById('user-input').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            sendMessage(); // Call sendMessage function on Enter key press
+            event.preventDefault(); // Prevent the default action (like a form submission)
+        }
+    });
 });
