@@ -1,5 +1,3 @@
-// gpt-neo.js
-
 async function getBotResponse(userMessage) {
     const response = await fetch('https://api-inference.huggingface.co/models/EleutherAI/gpt-neo-125M', {
         method: 'POST',
@@ -19,7 +17,6 @@ async function sendMessage() {
     const userInput = document.getElementById('user-input').value;
     if (userInput.trim() === "") return; // Don't send empty messages
 
-    // Display user message
     const chatbox = document.getElementById('chatbox');
     chatbox.innerHTML += `<div class="user-message">User: ${userInput}</div>`;
 
@@ -36,10 +33,9 @@ async function sendMessage() {
 
 // Add event listeners once the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', () => {
-    // Event listener for send button
-    document.getElementById('send-button').onclick = sendMessage;
+    const sendButton = document.getElementById('send-button');
+    sendButton.onclick = sendMessage; // Set the click event for the send button
 
-    // Event listener for Enter key
     document.getElementById('user-input').addEventListener('keydown', function(event) {
         if (event.key === 'Enter') {
             sendMessage(); // Call sendMessage function on Enter key press
