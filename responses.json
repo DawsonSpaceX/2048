@@ -1,0 +1,5 @@
+{
+    "greetings": ["Hello!", "Hi there!", "How can I help you?"],
+    "questions": ["What would you like to know?", "How can I assist you today?"],
+    "farewells": ["Goodbye!", "See you later!", "Take care!"]
+}
