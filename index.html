@@ -8,7 +8,7 @@
     <style>
         body {
             font-family: 'Roboto', sans-serif;
-            background-color: #f0f2f5;
+            background-color: #f9f9f9; /* Light background */
             margin: 0;
             padding: 0;
             display: flex;
@@ -17,22 +17,22 @@
             height: 100vh;
         }
         .container {
-            background: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            max-width: 600px;
+            background: #ffffff; /* White container */
+            border-radius: 12px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            max-width: 400px; /* Width similar to ChatGPT */
             width: 100%;
             overflow: hidden;
             display: flex;
             flex-direction: column;
         }
         .header {
-            background: #0077cc;
+            background: #10a37f; /* ChatGPT-like green */
             color: white;
             padding: 15px;
             text-align: center;
-            border-top-left-radius: 10px;
-            border-top-right-radius: 10px;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
         }
         .chat-box {
             padding: 20px;
@@ -46,7 +46,7 @@
         }
         .message {
             padding: 10px;
-            border-radius: 5px;
+            border-radius: 8px;
             max-width: 80%;
             position: relative;
             animation: fadeIn 0.3s ease-in-out;
@@ -56,17 +56,21 @@
             to { opacity: 1; }
         }
         .user {
-            background: #0077cc;
+            background: #10a37f; /* User message color */
             color: white;
             align-self: flex-end;
+            border-top-right-radius: 0; /* Make top corners rounder */
         }
         .bot {
-            background: #e1e1e1;
+            background: #e1e1e1; /* Bot message color */
             align-self: flex-start;
+            border-top-left-radius: 0; /* Make top corners rounder */
         }
         .input-area {
             display: flex;
             padding: 10px;
+            background: #f1f1f1; /* Light grey background */
+            border-top: 1px solid #ddd;
         }
         .input-area input {
             flex: 1;
@@ -78,7 +82,7 @@
         }
         .input-area button {
             padding: 10px;
-            background: #0077cc;
+            background: #10a37f; /* Button color */
             color: white;
             border: none;
             border-radius: 5px;
@@ -86,7 +90,7 @@
             transition: background 0.3s;
         }
         .input-area button:hover {
-            background: #005fa3;
+            background: #0d8f68; /* Darker shade on hover */
         }
     </style>
 </head>
