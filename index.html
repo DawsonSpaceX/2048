@@ -3,112 +3,170 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ChatGPT Simulation</title>
+    <title>Chat Application</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Roboto', sans-serif;
-            background-color: #f9f9f9; /* Light background */
+            background-color: #d3d3d3; /* Light gray */
             margin: 0;
             padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            position: relative;
         }
         .container {
-            background: #ffffff; /* White container */
-            border-radius: 12px;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-            max-width: 400px; /* Width similar to ChatGPT */
+            text-align: center;
+            display: none; /* Hidden until login */
+            position: relative;
+            max-width: 600px;
             width: 100%;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
         }
         .header {
-            background: #10a37f; /* ChatGPT-like green */
-            color: white;
-            padding: 15px;
-            text-align: center;
-            border-top-left-radius: 12px;
-            border-top-right-radius: 12px;
+            margin-bottom: 20px;
         }
-        .chat-box {
-            padding: 20px;
-            height: 400px;
-            overflow-y: auto;
-            border-bottom: 1px solid #eee;
-            flex-grow: 1;
+        .typing-animation {
+            display: inline-block;
+            color: black;
+            font-size: 24px;
+            position: relative;
+            margin: 20px 0;
+        }
+        .typing-animation::after {
+            content: ' .';
+            animation: blink 1s step-start infinite;
+            position: absolute;
+            left: 100%;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+        .text-box {
+            width: 80%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            margin: 20px 0;
+            resize: vertical; /* Allow vertical resizing */
+            min-height: 40px;
+            font-size: 16px;
+        }
+        .send-button {
+            background-color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
             display: flex;
-            flex-direction: column;
-            gap: 10px;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            margin-top: 10px;
+        }
+        .send-button::before {
+            content: '';
+            border: solid black;
+            border-width: 0 2px 2px 0;
+            display: inline-block;
+            padding: 3px;
+            transform: rotate(135deg);
+            position: absolute;
+        }
+        /* Profile picture */
+        .profile-pic {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+        /* Modal Styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5); /* Black with transparency */
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 300px;
+            text-align: center;
+        }
+        /* Chat Area */
+        .chat-area {
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            padding: 10px;
+            margin-top: 20px;
+            height: 300px;
+            overflow-y: auto;
+            background-color: #f9f9f9; /* Light gray for chat area */
         }
         .message {
             padding: 10px;
-            border-radius: 8px;
+            border-radius: 10px;
+            margin: 5px 0;
+            width: fit-content;
             max-width: 80%;
-            position: relative;
-            animation: fadeIn 0.3s ease-in-out;
         }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        .user {
-            background: #10a37f; /* User message color */
+        .user-message {
+            background-color: #10a37f; /* User message color */
             color: white;
             align-self: flex-end;
-            border-top-right-radius: 0; /* Make top corners rounder */
         }
-        .bot {
-            background: #e1e1e1; /* Bot message color */
+        .bot-message {
+            background-color: #e1e1e1; /* Bot message color */
+            color: black;
             align-self: flex-start;
-            border-top-left-radius: 0; /* Make top corners rounder */
-        }
-        .input-area {
-            display: flex;
-            padding: 10px;
-            background: #f1f1f1; /* Light grey background */
-            border-top: 1px solid #ddd;
-        }
-        .input-area input {
-            flex: 1;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            margin-right: 10px;
-            outline: none;
-        }
-        .input-area button {
-            padding: 10px;
-            background: #10a37f; /* Button color */
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-        .input-area button:hover {
-            background: #0d8f68; /* Darker shade on hover */
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <!-- Login / Register Container -->
+    <div id="login-container" style="text-align: center;">
+        <h1>Chat Application</h1>
+        <input type="text" id="username-input" placeholder="Enter Username" required>
+        <button onclick="createAccount()">Create Account</button>
+        <p id="error-message" style="color: red;"></p>
+    </div>
+
+    <!-- Main Chat Container -->
+    <div class="container" id="main-container">
         <div class="header">
-            <h2>ChatGPT Simulation</h2>
+            <h1>Welcome to the Chat App</h1>
         </div>
-        <div class="chat-box" id="chat-box">
-            <div class="message bot">Hello! How can I assist you today?</div>
-        </div>
-        <div class="input-area">
-            <input type="text" id="user-input" placeholder="Type your message...">
-            <button onclick="sendMessage()">Send</button>
+        <div class="typing-animation" id="typing-animation">What can I help with?</div>
+        <div class="chat-area" id="chat-area"></div>
+        <textarea class="text-box" id="user-input" placeholder="Type your message..."></textarea>
+        <button class="send-button" onclick="sendMessage()"></button>
+        <img src="path_to_your_profile_pic.jpg" class="profile-pic" onclick="toggleProfileOptions()">
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal" id="settings-modal">
+        <div class="modal-content">
+            <h3>Settings</h3>
+            <button onclick="changeTheme()">Change Theme</button>
+            <button onclick="closeModal()">Close</button>
         </div>
     </div>
 
     <script>
+        const usernames = []; // Store usernames
         const botResponses = [
             "That's interesting! Can you tell me more?",
             "I see! How does that make you feel?",
@@ -120,27 +178,82 @@
             "I'm here to help! What do you want to discuss?",
         ];
 
+        function createAccount() {
+            const usernameInput = document.getElementById('username-input');
+            const errorMessage = document.getElementById('error-message');
+            const username = usernameInput.value.trim();
+
+            // Validate username
+            if (username === '' || usernames.includes(username) || containsBadWords(username)) {
+                errorMessage.textContent = "Invalid username! Please try again.";
+                return;
+            }
+
+            // Add username and proceed to main container
+            usernames.push(username);
+            usernameInput.value = '';
+            errorMessage.textContent = '';
+            showMainContainer();
+        }
+
+        function containsBadWords(username) {
+            const badWords = ["badword1", "badword2"]; // Example bad words
+            return badWords.some(word => username.toLowerCase().includes(word));
+        }
+
+        function showMainContainer() {
+            document.getElementById('login-container').style.display = 'none';
+            document.getElementById('main-container').style.display = 'block';
+            document.getElementById('chat-area').innerHTML = ''; // Clear chat area
+            animateTyping();
+        }
+
+        function animateTyping() {
+            const typingAnimation = document.getElementById('typing-animation');
+            typingAnimation.style.opacity = 1;
+
+            // Delay to simulate typing
+            setTimeout(() => {
+                typingAnimation.style.opacity = 0; // Fade out
+            }, 3000); // Change duration as needed
+        }
+
+        function toggleProfileOptions() {
+            document.getElementById('settings-modal').style.display = 'flex';
+        }
+
+        function changeTheme() {
+            const currentColor = document.body.style.backgroundColor;
+            document.body.style.backgroundColor = currentColor === 'rgb(211, 211, 211)' ? '#333' : '#d3d3d3'; // Toggle between light and dark
+        }
+
+        function closeModal() {
+            document.getElementById('settings-modal').style.display = 'none';
+        }
+
         function sendMessage() {
             const input = document.getElementById('user-input');
-            const chatBox = document.getElementById('chat-box');
+            const chatArea = document.getElementById('chat-area');
 
             if (input.value.trim() === '') return;
 
+            // Create user message
             const userMessage = document.createElement('div');
-            userMessage.className = 'message user';
+            userMessage.className = 'message user-message';
             userMessage.textContent = input.value;
-            chatBox.appendChild(userMessage);
+            chatArea.appendChild(userMessage);
 
+            // Clear input
             input.value = '';
 
             // Simulate bot response
             setTimeout(() => {
                 const botMessage = document.createElement('div');
-                botMessage.className = 'message bot';
-                botMessage.textContent = getRandomResponse(); // Get a random response
-                chatBox.appendChild(botMessage);
-                chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom
-            }, 1000); // Delay for bot response
+                botMessage.className = 'message bot-message';
+                botMessage.textContent = getRandomResponse();
+                chatArea.appendChild(botMessage);
+                chatArea.scrollTop = chatArea.scrollHeight; // Scroll to bottom
+            }, 1000); // Bot response delay
         }
 
         function getRandomResponse() {
