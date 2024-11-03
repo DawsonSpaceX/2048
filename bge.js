@@ -8,7 +8,6 @@ document.getElementById("user-input").addEventListener("keypress", function(even
 async function getBotResponse(userMessage) {
     const thinkingAnimation = document.getElementById("thinking-animation");
     thinkingAnimation.classList.remove("hidden");
-    thinkingAnimation.innerHTML = "Comet is thinking...";
 
     const response = await fetch('https://api-inference.huggingface.co/models/BAAI/bge-base-en-v1.5', {
         method: 'POST',
@@ -19,15 +18,15 @@ async function getBotResponse(userMessage) {
         body: JSON.stringify({ inputs: userMessage })
     });
 
+    thinkingAnimation.classList.add("hidden");
+
     if (!response.ok) {
         const error = await response.json();
         console.error("Error from API:", error);
-        thinkingAnimation.classList.add("hidden");
         return `Error: ${error.error || 'Something went wrong. Please try again later.'}`;
     }
 
     const data = await response.json();
-    thinkingAnimation.classList.add("hidden");
     return data.generated_text || "I'm not sure how to respond.";
 }
 
@@ -46,28 +45,25 @@ async function sendMessage() {
 function addMessageToChat(message) {
     const chatbox = document.getElementById("chatbox");
     const messageElement = document.createElement("div");
-    messageElement.innerText = message;
 
-    // Typing effect for bot responses
     if (message.startsWith('Comet:')) {
         const typingElement = document.createElement("span");
         typingElement.className = "typing-animation";
-        typingElement.innerText = '';
         messageElement.appendChild(typingElement);
         chatbox.appendChild(messageElement);
 
-        // Simulate typing
-        let i = 0;
+        // Simulate typing effect
         const fullMessage = message.replace('Comet: ', '');
+        let i = 0;
         const typingInterval = setInterval(() => {
-            if (i < fullMessage.length) {
-                typingElement.innerText += fullMessage.charAt(i);
-                i++;
-            } else {
+            typingElement.innerText += fullMessage.charAt(i);
+            i++;
+            if (i === fullMessage.length) {
                 clearInterval(typingInterval);
             }
-        }, 50); // Adjust speed here
+        }, 100); // Adjust speed here
     } else {
+        messageElement.innerText = message;
         chatbox.appendChild(messageElement);
     }
 
