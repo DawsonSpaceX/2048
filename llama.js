@@ -1,47 +1,45 @@
-const API_URL = "https://api-inference.huggingface.co/models/nvidia/Llama-3.1-Nemotron-70B-Instruct-HF";
-const API_TOKEN = "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"; // Replace with your actual token
+const accessToken = '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'; // Your Hugging Face access token
 
-document.getElementById("send-button").addEventListener("click", sendMessage);
-document.getElementById("user-input").addEventListener("keypress", function(event) {
-    if (event.key === "Enter") {
-        sendMessage();
-    }
-});
-
-async function sendMessage() {
-    const inputField = document.getElementById("user-input");
-    const userMessage = inputField.value;
-    if (userMessage.trim() === "") return;
-
-    appendMessage("You: " + userMessage);
-    inputField.value = "";
-
-    const response = await getBotResponse(userMessage);
-    appendMessage("AI: " + response);
-}
-
-async function getBotResponse(message) {
-    const response = await fetch(API_URL, {
-        method: "POST",
+async function getBotResponse(userInput) {
+    const response = await fetch('https://api-inference.huggingface.co/models/meta-llama/Llama-3.2-1B', {
+        method: 'POST',
         headers: {
-            "Authorization": `Bearer ${API_TOKEN}`,
-            "Content-Type": "application/json"
+            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ inputs: message })
+        body: JSON.stringify({ inputs: userInput })
     });
 
     if (!response.ok) {
-        const errorMessage = await response.text();
-        console.error("Error from API:", errorMessage);
-        return "Sorry, I couldn't process that.";
+        const error = await response.json();
+        console.error("Error from API:", error);
+        throw new Error(error.error);
     }
 
     const data = await response.json();
-    return data[0]?.generated_text || "Sorry, I couldn't understand that.";
+    return data[0].generated_text; // Adjust based on response structure
 }
 
-function appendMessage(message) {
-    const chatBox = document.getElementById("chat-box");
-    chatBox.innerHTML += "<div>" + message + "</div>";
-    chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom
-}
+// Function to handle sending messages
+document.getElementById("sendBtn").onclick = async function () {
+    const userInput = document.getElementById("userInput").value;
+    const chatBox = document.getElementById("chatBox");
+
+    chatBox.innerHTML += `<p>You: ${userInput}</p>`;
+    
+    try {
+        const botResponse = await getBotResponse(userInput);
+        chatBox.innerHTML += `<p>AI: ${botResponse}</p>`;
+    } catch (error) {
+        chatBox.innerHTML += `<p>AI: Sorry, something went wrong.</p>`;
+    }
+
+    document.getElementById("userInput").value = ""; // Clear the input field
+};
+
+// Allow sending message with Enter key
+document.getElementById("userInput").addEventListener("keypress", function (e) {
+    if (e.key === "Enter") {
+        document.getElementById("sendBtn").click();
+    }
+});
