@@ -10,12 +10,9 @@
     <div id="container">
         <div id="header">
             <h1>Comet AI</h1>
-            <div id="profile">
-                <img src="path/to/your/profile-pic.jpg" alt="Profile Picture" id="profile-pic">
-                <div id="profile-menu">
-                    <button onclick="openSettings()">Settings</button>
-                    <button onclick="logout()">Logout</button>
-                </div>
+            <div id="profile-menu">
+                <button onclick="openSettings()">Settings</button>
+                <button onclick="logout()">Logout</button>
             </div>
         </div>
         <div id="chat-container">
@@ -23,7 +20,7 @@
                 <div id="messages"></div>
             </div>
             <div id="input-container">
-                <input type="text" id="user-input" placeholder="Type your message here...">
+                <input type="text" id="user-input" placeholder="Type your message here..." />
                 <button id="send-button" onclick="sendMessage()">🔼</button>
             </div>
         </div>
@@ -32,3 +29,15 @@
     <script src="gpt2.js"></script>
 </body>
 </html>
+
+<script>
+    function openSettings() {
+        // Placeholder for settings functionality
+        alert("Settings functionality not yet implemented.");
+    }
+
+    function logout() {
+        // Placeholder for logout functionality
+        alert("Logout functionality not yet implemented.");
+    }
+</script>
