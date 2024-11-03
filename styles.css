@@ -31,12 +31,6 @@ body {
     padding: 10px;
 }
 
-.typing-animation {
-    display: inline-block;
-    font-style: italic;
-    color: gray;
-}
-
 .hidden {
     display: none;
 }
