@@ -1,36 +1,47 @@
-const sendButton = document.getElementById('sendButton');
-const userInput = document.getElementById('userInput');
-const messages = document.getElementById('messages');
+const API_URL = "https://api-inference.huggingface.co/models/nvidia/Llama-3.1-Nemotron-70B-Instruct-HF";
+const API_TOKEN = "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"; // Replace with your actual token
 
-sendButton.onclick = async () => {
-    const inputText = userInput.value;
-    if (!inputText) return;
+document.getElementById("send-button").addEventListener("click", sendMessage);
+document.getElementById("user-input").addEventListener("keypress", function(event) {
+    if (event.key === "Enter") {
+        sendMessage();
+    }
+});
 
-    // Display user's message
-    messages.innerHTML += `<div>User: ${inputText}</div>`;
-    userInput.value = '';
+async function sendMessage() {
+    const inputField = document.getElementById("user-input");
+    const userMessage = inputField.value;
+    if (userMessage.trim() === "") return;
 
-    // Call the AI model
-    const response = await getBotResponse(inputText);
-    messages.innerHTML += `<div>AI: ${response}</div>`;
-    messages.scrollTop = messages.scrollHeight; // Scroll to bottom
-};
+    appendMessage("You: " + userMessage);
+    inputField.value = "";
 
-async function getBotResponse(userInput) {
-    const response = await fetch('https://api-inference.huggingface.co/models/nvidia/Llama-3.1-Nemotron-70B-Instruct-HF', {
-        method: 'POST',
+    const response = await getBotResponse(userMessage);
+    appendMessage("AI: " + response);
+}
+
+async function getBotResponse(message) {
+    const response = await fetch(API_URL, {
+        method: "POST",
         headers: {
-            'Authorization': `Bearer YOUR_HUGGING_FACE_TOKEN`,
-            'Content-Type': 'application/json'
+            "Authorization": `Bearer ${API_TOKEN}`,
+            "Content-Type": "application/json"
         },
-        body: JSON.stringify({ inputs: userInput })
+        body: JSON.stringify({ inputs: message })
     });
 
     if (!response.ok) {
-        console.error('Error from API:', response.statusText);
-        return 'Error: Unable to fetch response';
+        const errorMessage = await response.text();
+        console.error("Error from API:", errorMessage);
+        return "Sorry, I couldn't process that.";
     }
 
     const data = await response.json();
-    return data.generated_text || 'No response generated.';
+    return data[0]?.generated_text || "Sorry, I couldn't understand that.";
+}
+
+function appendMessage(message) {
+    const chatBox = document.getElementById("chat-box");
+    chatBox.innerHTML += "<div>" + message + "</div>";
+    chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom
 }
