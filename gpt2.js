@@ -1,5 +1,10 @@
 document.addEventListener("DOMContentLoaded", () => {
     document.getElementById('send-button').onclick = sendMessage;
+    document.getElementById('user-input').addEventListener("keydown", function(event) {
+        if (event.key === "Enter") {
+            sendMessage();
+        }
+    });
 });
 
 async function getBotResponse(userInput) {
@@ -16,7 +21,7 @@ async function getBotResponse(userInput) {
     if (data && data[0] && data[0].generated_text) {
         return data[0].generated_text;
     } else {
-        throw new Error("Invalid response from API");
+        return "I'm sorry, I didn't understand that.";
     }
 }
 
@@ -35,6 +40,7 @@ async function sendMessage() {
         addMessage(botResponse, 'bot');
     } catch (error) {
         console.error('Error getting response from bot:', error);
+        addMessage("Sorry, there was an error connecting to the AI.", 'bot');
     }
 }
 
