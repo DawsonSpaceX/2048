@@ -3,15 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Comet AI Chatbot</title>
     <link rel="stylesheet" href="styles.css">
+    <title>Comet AI</title>
 </head>
 <body>
-    <div class="container">
-        <div id="chatbox" class="chatbox"></div>
-        <input type="text" id="user-input" placeholder="Type your message here..." />
-        <button id="send-button">Send</button>
+    <div id="container">
+        <div id="header">
+            <h1>Comet AI</h1>
+            <div id="profile">
+                <img src="path/to/your/profile-pic.jpg" alt="Profile Picture" id="profile-pic">
+                <div id="profile-menu">
+                    <button onclick="openSettings()">Settings</button>
+                    <button onclick="logout()">Logout</button>
+                </div>
+            </div>
+        </div>
+        <div id="chat-container">
+            <div id="chat-box">
+                <div id="messages"></div>
+            </div>
+            <div id="input-container">
+                <input type="text" id="user-input" placeholder="Type your message here...">
+                <button id="send-button" onclick="sendMessage()">🔼</button>
+            </div>
+        </div>
     </div>
+
     <script src="gpt2.js"></script>
 </body>
 </html>
