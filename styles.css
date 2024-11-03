@@ -50,3 +50,19 @@ body {
 #send-button:hover {
     background-color: #0056b3;
 }
+
+.user-message {
+    text-align: left;
+    background-color: #d1ecf1;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 5px 0;
+}
+
+.bot-message {
+    text-align: left;
+    background-color: #f8d7da;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 5px 0;
+}
