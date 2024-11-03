@@ -7,17 +7,10 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>Comet AI</h1>
-        </div>
-        <div id="chat-box" class="chat-box">
-            <!-- Messages will appear here -->
-        </div>
-        <div class="input-area">
-            <input type="text" id="user-input" placeholder="Type your message here...">
-            <button id="send-button">Send</button>
-        </div>
+    <div id="chatContainer">
+        <div id="chatBox"></div>
+        <input type="text" id="userInput" placeholder="Type your message here...">
+        <button id="sendBtn">Send</button>
     </div>
     <script src="llama.js"></script>
 </body>
