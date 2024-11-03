@@ -133,6 +133,11 @@
             color: black;
             align-self: flex-start;
         }
+        /* Typing Indicator for Bot */
+        .bot-typing {
+            display: none; /* Hidden by default */
+            color: black;
+        }
     </style>
 </head>
 <body>
@@ -154,6 +159,7 @@
         <textarea class="text-box" id="user-input" placeholder="Type your message..."></textarea>
         <button class="send-button" onclick="sendMessage()"></button>
         <img src="path_to_your_profile_pic.jpg" class="profile-pic" onclick="toggleProfileOptions()">
+        <div id="bot-typing" class="bot-typing">Typing...</div>
     </div>
 
     <!-- Settings Modal -->
@@ -246,17 +252,26 @@
             // Clear input
             input.value = '';
 
-            // Simulate bot response
+            // Show bot typing indicator
+            const botTyping = document.getElementById('bot-typing');
+            botTyping.style.display = 'block';
+
+            // Simulate bot response with typing animation
             setTimeout(() => {
+                botTyping.style.display = 'none'; // Hide typing indicator
                 const botMessage = document.createElement('div');
                 botMessage.className = 'message bot-message';
-                botMessage.textContent = getRandomResponse();
-                chatArea.appendChild(botMessage);
-                chatArea.scrollTop = chatArea.scrollHeight; // Scroll to bottom
-            }, 1000); // Bot response delay
+
+                // Simulate typing
+                setTimeout(() => {
+                    botMessage.textContent = getBotResponse();
+                    chatArea.appendChild(botMessage);
+                    chatArea.scrollTop = chatArea.scrollHeight; // Auto-scroll to bottom
+                }, 1000); // Delay for bot response
+            }, 2000); // Delay before showing typing indicator
         }
 
-        function getRandomResponse() {
+        function getBotResponse() {
             return botResponses[Math.floor(Math.random() * botResponses.length)];
         }
     </script>
