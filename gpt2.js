@@ -1,3 +1,7 @@
+document.addEventListener("DOMContentLoaded", () => {
+    document.getElementById('send-button').onclick = sendMessage;
+});
+
 async function getBotResponse(userInput) {
     const response = await fetch('https://api-inference.huggingface.co/models/openai-community/gpt2', {
         method: 'POST',
@@ -7,7 +11,7 @@ async function getBotResponse(userInput) {
         },
         body: JSON.stringify({ inputs: userInput }),
     });
-    
+
     const data = await response.json();
     if (data && data[0] && data[0].generated_text) {
         return data[0].generated_text;
