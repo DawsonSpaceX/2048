@@ -58,27 +58,7 @@ async function sendMessage() {
 function addMessageToChat(message) {
     const chatbox = document.getElementById("chatbox");
     const messageElement = document.createElement("div");
-
-    if (message.startsWith('Comet:')) {
-        const typingElement = document.createElement("span");
-        typingElement.className = "typing-animation";
-        chatbox.appendChild(messageElement); // Append the message container first
-        messageElement.appendChild(typingElement); // Then append the typing element
-
-        // Simulate typing effect
-        const fullMessage = message.replace('Comet: ', '');
-        let i = 0;
-        const typingInterval = setInterval(() => {
-            typingElement.innerText += fullMessage.charAt(i);
-            i++;
-            if (i === fullMessage.length) {
-                clearInterval(typingInterval);
-            }
-        }, 100); // Adjust speed here
-    } else {
-        messageElement.innerText = message;
-        chatbox.appendChild(messageElement);
-    }
-
+    messageElement.innerText = message;
+    chatbox.appendChild(messageElement);
     chatbox.scrollTop = chatbox.scrollHeight; // Scroll to the bottom
 }
