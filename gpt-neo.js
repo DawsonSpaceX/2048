@@ -19,23 +19,25 @@ async function sendMessage() {
     const userInput = document.getElementById('user-input').value;
     if (userInput.trim() === "") return; // Don't send empty messages
 
-    console.log("User Input:", userInput); // Log the user input
+    // Display user message
+    const chatbox = document.getElementById('chatbox');
+    chatbox.innerHTML += `<div class="user-message">User: ${userInput}</div>`;
+
+    // Get bot response
     const botResponse = await getBotResponse(userInput);
-    
-    document.getElementById('chatbox').innerHTML += `<div>User: ${userInput}</div>`;
-    document.getElementById('chatbox').innerHTML += `<div>Bot: ${botResponse}</div>`;
-    document.getElementById('user-input').value = ''; // Clear input after sending
+    chatbox.innerHTML += `<div class="bot-message">Bot: ${botResponse}</div>`;
+
+    // Clear the input
+    document.getElementById('user-input').value = '';
+
+    // Scroll to the bottom of chatbox
+    chatbox.scrollTop = chatbox.scrollHeight;
 }
 
 // Add event listeners once the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', () => {
     // Event listener for send button
-    const sendButton = document.getElementById('send-button');
-    if (sendButton) {
-        sendButton.onclick = sendMessage;
-    } else {
-        console.error("Send button not found!"); // Log if button not found
-    }
+    document.getElementById('send-button').onclick = sendMessage;
 
     // Event listener for Enter key
     document.getElementById('user-input').addEventListener('keydown', function(event) {
